@@ -1,0 +1,690 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<title>HB-ER1 Environmental Regulation Library</title>
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    font-family:'Segoe UI',Arial,sans-serif;
+    background:linear-gradient(180deg,#f4f8fc,#e9eef3);
+    color:#333;
+}
+
+/* HEADER */
+
+.header{
+    background:linear-gradient(135deg,#1F4E78,#2F75B5);
+    color:white;
+    text-align:center;
+    padding:30px;
+    position:sticky;
+    top:0;
+    z-index:1000;
+    box-shadow:0 4px 15px rgba(0,0,0,.2);
+}
+.logo{
+    position:absolute;
+    top:8px;
+    left:15px;
+
+    max-height:30px;
+    width:auto;
+
+    background:transparent;
+    padding:0;
+    box-shadow:none;
+}
+
+.header h1{
+    font-size:36px;
+    margin-bottom:8px;
+}
+
+.header p{
+    opacity:.9;
+    font-size:15px;
+}
+
+/* MARQUEE INFO BAR */
+
+.info-bar{
+    background:white;
+    padding:12px;
+    text-align:center;
+    font-weight:600;
+    color:#1F4E78;
+    box-shadow:0 2px 8px rgba(0,0,0,.08);
+}
+
+/* KPI */
+
+.kpi-container{
+    display:flex;
+    justify-content:center;
+    flex-wrap:wrap;
+    gap:20px;
+    padding:25px;
+}
+
+.kpi{
+    width:220px;
+    background:white;
+    border-radius:18px;
+    padding:20px;
+    text-align:center;
+    box-shadow:0 6px 18px rgba(0,0,0,.12);
+    transition:.3s;
+}
+
+.kpi:hover{
+    transform:translateY(-6px);
+}
+
+.kpi-value{
+    font-size:34px;
+    font-weight:bold;
+    color:#1F4E78;
+    margin-bottom:8px;
+}
+
+/* SEARCH */
+
+.search-box{
+    text-align:center;
+    padding:10px 20px 30px;
+}
+
+.search-box input{
+    width:700px;
+    max-width:95%;
+    padding:15px 25px;
+    border:none;
+    border-radius:50px;
+    font-size:16px;
+    box-shadow:0 3px 12px rgba(0,0,0,.15);
+    outline:none;
+}
+.search-box{
+    text-align:center;
+    padding:10px 20px 30px;
+}
+
+#clearBtn{
+    margin-left:10px;
+    padding:14px 18px;
+    border:none;
+    border-radius:50px;
+    background:#d9534f;
+    color:white;
+    cursor:pointer;
+    font-weight:bold;
+    box-shadow:0 3px 8px rgba(0,0,0,.15);
+}
+
+#clearBtn:hover{
+    background:#c9302c;
+}
+
+#resultCount{
+    margin-top:12px;
+    color:#1F4E78;
+    font-weight:600;
+    font-size:15px;
+}
+
+/* REGION */
+
+.region{
+    margin:30px;
+}
+
+.region-header{
+    background:linear-gradient(135deg,#70AD47,#5D943A);
+    color:white;
+    padding:15px 20px;
+    border-radius:12px;
+    font-size:22px;
+    font-weight:600;
+    box-shadow:0 4px 10px rgba(0,0,0,.15);
+
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+}
+
+.region-count{
+    background:white;
+    color:#1F4E78;
+    padding:5px 14px;
+    border-radius:20px;
+    font-size:14px;
+    font-weight:bold;
+}
+.region-header{
+    cursor:pointer;
+    transition:0.3s;
+}
+
+.region-header:hover{
+    transform:translateY(-2px);
+    box-shadow:0 6px 15px rgba(0,0,0,.2);
+}
+
+.region-content{
+    display:none;
+    overflow:hidden;
+}
+
+.arrow{
+    margin-left:10px;
+    font-size:14px;
+    font-weight:bold;
+}
+
+/* COUNTRY GRID */
+
+.country-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fill,minmax(260px,1fr));
+    gap:18px;
+    margin-top:18px;
+}
+
+/* CARD */
+
+.country-card{
+    background:rgba(255,255,255,0.95);
+    backdrop-filter:blur(10px);
+    border-radius:16px;
+    padding:18px;
+    box-shadow:0 4px 12px rgba(0,0,0,.12);
+    transition:.3s;
+    border-top:4px solid #1F4E78;
+}
+
+.country-card:hover{
+    transform:translateY(-8px);
+    box-shadow:0 8px 22px rgba(0,0,0,.2);
+}
+
+.country-card h3{
+    color:#1F4E78;
+    font-size:18px;
+    margin-bottom:12px;
+}
+
+.country-card p{
+    color:#666;
+    font-size:13px;
+    margin-bottom:12px;
+}
+
+/* BUTTON */
+
+.open-btn{
+    display:block;
+    text-align:center;
+    background:linear-gradient(135deg,#1F4E78,#2F75B5);
+    color:white;
+    text-decoration:none;
+    padding:12px;
+    border-radius:10px;
+    font-weight:600;
+    transition:.3s;
+}
+
+.open-btn:hover{
+    transform:scale(1.03);
+    background:linear-gradient(135deg,#153957,#1F4E78);
+}
+
+/* FOOTER */
+
+.footer{
+    text-align:center;
+    padding:25px;
+    color:#666;
+}
+
+/* RESPONSIVE */
+
+@media(max-width:768px){
+
+.header h1{
+    font-size:26px;
+}
+
+.region{
+    margin:15px;
+}
+
+.kpi{
+    width:170px;
+}
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="header">
+ <img src="maruti_logo.jpg"
+  alt="Maruti Suzuki"
+  class="logo">
+          <h1> HB-ER1 ENVIRONMENTAL REGULATION LIBRARY</h1>
+          <p>Maruti Suzuki Global Environmental Compliance Export Database</p>
+</div>
+
+<div class="info-bar">
+    REACH • ELV • RoHS • Batteries • Packaging • POPs • Mercury • Chemical Compliance
+</div>
+
+<div class="kpi-container">
+
+    <div class="kpi">
+      <div class="kpi-value">99</div>
+      <div>Country Regulations</div>
+    </div>
+
+    <div class="kpi">
+        <div class="kpi-value">95+</div>
+        <div>Countries</div>
+    </div>
+
+    <div class="kpi">
+        <div class="kpi-value">Live</div>
+        <div>Database Status</div>
+    </div>
+
+    <div class="kpi">
+        <div class="kpi-value">100%</div>
+        <div>Coverage</div>
+    </div>
+
+</div>
+
+<div class="search-box">
+    <input
+        type="text"
+        id="searchBox"
+        placeholder="🔍 Search Country, Region..."
+        onkeyup="searchCountry()">
+</div>
+
+<div id="portal"></div>
+
+<div class="footer">
+    <strong>Maruti Suzuki India Limited</strong><br>
+    © HB-ER1 Environmental Regulation Library<br>
+     Made by Shubham Gupta
+</div>
+
+<script>
+
+/* FLAGS */
+
+const flags={
+"India":"🇮🇳",
+"China":"🇨🇳",
+"Japan":"🇯🇵",
+"Korea":"🇰🇷",
+"USA":"🇺🇸",
+"Canada":"🇨🇦",
+"Germany":"🇩🇪",
+"France":"🇫🇷",
+"UK":"🇬🇧",
+"Italy":"🇮🇹",
+"Spain":"🇪🇸",
+"Sweden":"🇸🇪",
+"Australia":"🇦🇺",
+"New Zealand":"🇳🇿",
+"Brazil":"🇧🇷",
+"Mexico":"🇲🇽",
+"South Africa":"🇿🇦",
+"Thailand":"🇹🇭",
+"Malaysia":"🇲🇾",
+"Singapore":"🇸🇬",
+"Indonesia":"🇮🇩",
+"Vietnam":"🇻🇳"
+};
+
+/* YOUR COUNTRY MASTER DATA */
+
+const countries = [
+
+["Algeria","Africa"],
+["Benin","Africa"],
+["Côte d'Ivoire","Africa"],
+["Egypt","Africa"],
+["Gabon","Africa"],
+["Liberia","Africa"],
+["Mauritius","Africa"],
+["Morocco","Africa"],
+["Nigeria","Africa"],
+["Other Countries in Africa","Africa"],
+["Reunion","Africa"],
+["Rwanda","Africa"],
+["Seychelles","Africa"],
+["South Africa","Africa"],
+["Sudan","Africa"],
+["Togo","Africa"],
+["Uganda","Africa"],
+
+["China","Asia"],
+["Hong Kong","Asia"],
+["India","Asia"],
+["Japan","Asia"],
+["Korea","Asia"],
+["Mongolia","Asia"],
+["Nepal","Asia"],
+["Pakistan","Asia"],
+["Sri Lanka","Asia"],
+["Taiwan","Asia"],
+
+["Brunei","South East Asia"],
+["Indonesia","South East Asia"],
+["Malaysia","South East Asia"],
+["Philippines","South East Asia"],
+["Singapore","South East Asia"],
+["Thailand","South East Asia"],
+["Viet Nam","South East Asia"],
+
+["Australia","Oceania"],
+["New Caledonia","Oceania"],
+["New Zealand","Oceania"],
+
+["Argentina","Latin America"],
+["Brazil","Latin America"],
+["Chile","Latin America"],
+["Colombia","Latin America"],
+["Costa Rica","Latin America"],
+["Dominica","Latin America"],
+["El Salvador","Latin America"],
+["Guatemala","Latin America"],
+["Honduras","Latin America"],
+["Jamaica","Latin America"],
+["Mexico","Latin America"],
+["Panama","Latin America"],
+["Uruguay","Latin America"],
+["Venezuela","Latin America"],
+
+["Canada","North America"],
+["USA","North America"],
+["USA (California State)","North America"],
+["American States (except California State)","North America"],
+
+["GCC (Bahrain, Kuwait, Oman, Qatar, Saudi Arabia, United Arab Emirates)","Middle East"],
+["Iran","Middle East"],
+["Iraq","Middle East"],
+["Israel","Middle East"],
+["Jordan","Middle East"],
+["Lebanon","Middle East"],
+["Qatar","Middle East"],
+
+["Austria","Europe"],
+["Belgium","Europe"],
+["Bulgaria","Europe"],
+["Croatia","Europe"],
+["Cyprus","Europe"],
+["Czech Republic","Europe"],
+["Denmark","Europe"],
+["Estonia","Europe"],
+["EU (ECEEC)","Europe"],
+["Finland","Europe"],
+["France","Europe"],
+["France, Poland, Sweden","Europe"],
+["Germany","Europe"],
+["Greece","Europe"],
+["Hungary","Europe"],
+["Ireland","Europe"],
+["Italy","Europe"],
+["Latvia","Europe"],
+["Lithuania","Europe"],
+["Luxembourg","Europe"],
+["Malta","Europe"],
+["Netherlands","Europe"],
+["Norway","Europe"],
+["Other Countries in Europe","Europe"],
+["Poland","Europe"],
+["Portugal","Europe"],
+["Romania","Europe"],
+["Russia","Europe"],
+["Slovakia","Europe"],
+["Spain","Europe"],
+["Sweden","Europe"],
+["Turkey","Europe"],
+["UK","Europe"],
+["Ukraine","Europe"],
+["UN/ECE","Europe"],
+["Andorra, Gibraltar, Iceland, Macedonia, Monaco, Norway, San Marino, Switzerland, Vatican","Europe"]
+
+];
+
+/* REGIONS */
+
+const regions=[
+"Africa",
+"Asia",
+"South East Asia",
+"Europe",
+"Latin America",
+"Middle East",
+"North America",
+"Oceania"
+];
+
+/* PORTAL */
+
+function createPortal(){
+
+let html="";
+
+regions.forEach(region=>{
+
+let list =
+countries.filter(x=>x[1]===region);
+
+if(list.length===0) return;
+
+html += `
+<div class="region">
+
+    <div class="region-header"
+         onclick="toggleRegion('${region.replace(/\s+/g,'')}')">
+
+        <span>
+            🌎 ${region}
+        </span>
+
+        <span>
+            <span class="region-count">${list.length}</span>
+            <span id="icon-${region.replace(/\s+/g,'')}" class="arrow">
+                ▼
+            </span>
+        </span>
+
+    </div>
+
+    <div id="${region.replace(/\s+/g,'')}" class="region-content">
+
+        <div class="country-grid">
+`;
+
+list.sort((a,b)=>a[0].localeCompare(b[0]));
+
+list.forEach(item=>{
+
+let country=item[0];
+
+let flag=flags[country] || "🌍";
+
+let filePath=
+encodeURI(region + "/" + country + ".xlsx");
+
+html += `
+<div class="country-card">
+
+<h3>${flag} ${country}</h3>
+
+<p><strong>Region:</strong> ${region}</p>
+
+<a class="open-btn"
+   href="${filePath}">
+📄 Open Regulation
+</a>
+
+</div>
+`;
+
+});
+
+html += `
+        </div>
+    </div>
+</div>
+`;
+
+});
+
+document.getElementById("portal").innerHTML = html;
+
+}
+
+/* SEARCH */
+
+function searchCountry(){
+
+    let text =
+    document.getElementById("searchBox")
+    .value
+    .toLowerCase();
+
+    let totalMatches = 0;
+
+    document.querySelectorAll(".region")
+    .forEach(region=>{
+
+        let cards =
+        region.querySelectorAll(".country-card");
+
+        let visible = 0;
+
+        cards.forEach(card=>{
+
+            if(card.innerText.toLowerCase().includes(text)){
+
+                card.style.display="";
+
+                visible++;
+                totalMatches++;
+
+            }else{
+
+                card.style.display="none";
+
+            }
+
+        });
+
+        let content =
+        region.querySelector(".region-content");
+
+        let arrow =
+        region.querySelector(".arrow");
+
+        if(text===""){
+
+            region.style.display="";
+
+        }
+        else if(visible>0){
+
+            region.style.display="";
+            content.style.display="block";
+
+            if(arrow) arrow.innerHTML="▲";
+
+        }
+        else{
+
+            region.style.display="none";
+
+        }
+
+    });
+
+    document.getElementById("resultCount")
+    .innerHTML = text
+        ? `Found ${totalMatches} matching countries`
+        : "";
+}
+
+function clearSearch(){
+
+    document.getElementById("searchBox").value="";
+
+    searchCountry();
+
+    document.querySelectorAll(".region-content")
+    .forEach(content=>{
+
+        content.style.display="none";
+
+    });
+
+    document.querySelectorAll(".arrow")
+    .forEach(icon=>{
+
+        icon.innerHTML="▼";
+
+    });
+
+    document.getElementById("Africa")
+    .style.display="block";
+
+    document.getElementById("icon-Africa")
+    .innerHTML="▲";
+}
+function toggleRegion(id){
+
+    const section =
+    document.getElementById(id);
+
+    const icon =
+    document.getElementById("icon-" + id);
+
+    if(section.style.display === "block"){
+
+        section.style.display = "none";
+        icon.innerHTML = "▼";
+
+    }else{
+
+        section.style.display = "block";
+        icon.innerHTML = "▲";
+
+    }
+}
+createPortal();
+
+document.getElementById("Africa").style.display="block";
+document.getElementById("icon-Africa").innerHTML="▲";
+
+</script>
+
+</body>
+</html>
